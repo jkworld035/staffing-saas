@@ -1,4 +1,4 @@
-// Hand-authored to match supabase/migrations/0001_init_schema.sql.
+﻿// Hand-authored to match supabase/migrations/0001_init_schema.sql.
 // Once the Supabase project is linked, replace this file by running:
 //   npm run gen:types
 
@@ -93,6 +93,7 @@ export interface VendorInvoice {
   amount: number;
   invoice_date: string;
   due_date: string;
+  paid_date: string | null;
   status: VendorInvoiceStatus;
 }
 
