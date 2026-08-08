@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { Vendor } from "@/types/vendor";
 
@@ -28,6 +28,11 @@ const columns: Column<Vendor>[] = [
   { header: "Phone", accessor: (v) => v.phone ?? "--" },
   { header: "Terms", accessor: (v) => v.payment_terms.replace("_", " ") },
   { header: "Status", accessor: (v) => <Badge tone={v.is_active ? "signal" : "neutral"}>{v.is_active ? "Active" : "Inactive"}</Badge> },
+  { header: "", accessor: (v) => (
+      <a href={`/vendors/${v.id}/edit`} className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline">
+        <Pencil size={12} /> Edit
+      </a>
+    ), align: "right" },
 ];
 
 export default async function VendorsPage() {

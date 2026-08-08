@@ -4,7 +4,7 @@ import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency } from "@/lib/calculations/invoice";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 // Joined row: consultant + the client/vendor names it's linked to, so margin
@@ -90,6 +90,11 @@ const columns: Column<ConsultantRow>[] = [
       );
     }, align: "right" },
   { header: "Status", accessor: (c) => <Badge tone={c.is_active ? "signal" : "neutral"}>{c.is_active ? "Active" : "Ended"}</Badge> },
+  { header: "", accessor: (c) => (
+      <a href={`/consultants/${c.id}/edit`} className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline">
+        <Pencil size={12} /> Edit
+      </a>
+    ), align: "right" },
 ];
 
 export default async function ConsultantsPage() {
