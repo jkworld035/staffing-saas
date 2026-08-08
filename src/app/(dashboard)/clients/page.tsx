@@ -1,9 +1,9 @@
-import { Topbar } from "@/components/layout/Topbar";
+﻿import { Topbar } from "@/components/layout/Topbar";
 import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { Client } from "@/types/database.types";
 
@@ -24,11 +24,16 @@ const columns: Column<Client>[] = [
         <p className="text-xs text-slate-400">{c.company}</p>
       </div>
     ) },
-  { header: "Billing contact", accessor: (c) => c.billing_contact ?? "—" },
+  { header: "Billing contact", accessor: (c) => c.billing_contact ?? "--" },
   { header: "Cycle", accessor: (c) => <Badge>{c.billing_cycle}</Badge> },
   { header: "Terms", accessor: (c) => c.payment_terms.replace("_", " ") },
-  { header: "PO #", accessor: (c) => c.purchase_order ?? "—" },
+  { header: "PO #", accessor: (c) => c.purchase_order ?? "--" },
   { header: "Status", accessor: (c) => <Badge tone={c.is_active ? "signal" : "neutral"}>{c.is_active ? "Active" : "Inactive"}</Badge> },
+  { header: "", accessor: (c) => (
+      <a href={`/clients/${c.id}/edit`} className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline">
+        <Pencil size={12} /> Edit
+      </a>
+    ), align: "right" },
 ];
 
 export default async function ClientsPage() {

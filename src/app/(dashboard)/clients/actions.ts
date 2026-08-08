@@ -27,3 +27,27 @@ export async function createClientRecord(formData: FormData) {
   revalidatePath("/clients");
   redirect("/clients");
 }
+export async function updateClientRecord(id: string, formData: FormData) {
+  const supabase = await createClient();
+
+  const payload = {
+    client_name: String(formData.get("client_name") ?? ""),
+    company: String(formData.get("company") ?? ""),
+    billing_contact: String(formData.get("billing_contact") ?? "") || null,
+    email: String(formData.get("email") ?? "") || null,
+    currency: String(formData.get("currency") ?? "USD"),
+    billing_cycle: String(formData.get("billing_cycle") ?? "MONTHLY"),
+    payment_terms: String(formData.get("payment_terms") ?? "NET_30"),
+    purchase_order: String(formData.get("purchase_order") ?? "") || null,
+    is_active: formData.get("is_active") === "on",
+  };
+
+  const { error } = await supabase.from("clients").update(payload).eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/clients");
+  redirect("/clients");
+}

@@ -14,6 +14,8 @@ async function getDashboardData() {
   const empty = {
     todayRevenue: 0,
     monthRevenue: 0,
+    monthVendorCost: 0,
+    monthPayrollCost: 0,
     outstandingInvoices: 0,
     pendingVendorPayments: 0,
     payrollDue: 0,
@@ -54,6 +56,14 @@ async function getDashboardData() {
       .filter((i) => new Date(i.invoice_date) >= startOfMonth)
       .reduce((sum, i) => sum + Number(i.grand_total ?? 0), 0);
 
+    const monthVendorCost = vendorInvoices
+      .filter((v) => new Date(v.invoice_date) >= startOfMonth)
+      .reduce((sum, v) => sum + Number(v.amount ?? 0), 0);
+
+    const monthPayrollCost = payrollRows
+      .filter((p) => new Date(p.pay_period_start) >= startOfMonth)
+      .reduce((sum, p) => sum + Number(p.gross_pay ?? 0), 0);
+
     const outstandingInvoices = invoices
       .filter((i) => ["SENT", "OVERDUE"].includes(i.status))
       .reduce((sum, i) => sum + Number(i.grand_total ?? 0), 0);
@@ -79,6 +89,8 @@ async function getDashboardData() {
     return {
       ...empty,
       monthRevenue,
+      monthVendorCost,
+      monthPayrollCost,
       outstandingInvoices,
       pendingVendorPayments,
       payrollDue,
@@ -96,8 +108,8 @@ export default async function DashboardPage() {
   const d = await getDashboardData();
   const pl = calculateProfitLoss({
     clientRevenue: d.monthRevenue,
-    vendorCost: d.pendingVendorPayments,
-    payrollCost: d.payrollDue,
+    vendorCost: d.monthVendorCost,
+    payrollCost: d.monthPayrollCost,
   });
 
   return (
