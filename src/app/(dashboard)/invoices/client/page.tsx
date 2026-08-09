@@ -21,6 +21,8 @@ async function getInvoices(): Promise<ClientInvoice[]> {
   }
 }
 
+const pdfLinkClass = "flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline";
+
 const columns: Column<ClientInvoice>[] = [
   { header: "Invoice #", accessor: (i) => <span className="font-mono text-xs">{i.invoice_number}</span> },
   { header: "Date", accessor: (i) => formatDate(i.invoice_date) },
@@ -30,16 +32,18 @@ const columns: Column<ClientInvoice>[] = [
   { header: "Taxes", accessor: (i) => formatCurrency(i.taxes), align: "right" },
   { header: "Total", accessor: (i) => <span className="font-semibold">{formatCurrency(i.grand_total)}</span>, align: "right" },
   { header: "Status", accessor: (i) => <StatusBadge status={i.status} /> },
-  { header: "", accessor: (i) => (
-      
-        href={`/api/invoices/client/${i.id}/pdf`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline"
-      >
-        <FileDown size={12} /> PDF
-      </a>
-    ), align: "right" },
+  {
+    header: "",
+    accessor: (i) => {
+      const href = "/api/invoices/client/" + i.id + "/pdf";
+      return (
+        <a href={href} target="_blank" rel="noopener noreferrer" className={pdfLinkClass}>
+          <FileDown size={12} /> PDF
+        </a>
+      );
+    },
+    align: "right",
+  },
 ];
 
 export default async function ClientInvoicesPage() {
