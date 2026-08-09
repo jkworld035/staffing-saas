@@ -1,10 +1,11 @@
-import { Topbar } from "@/components/layout/Topbar";
+﻿import { Topbar } from "@/components/layout/Topbar";
 import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
 import { formatCurrency } from "@/lib/calculations/invoice";
 import { createClient } from "@/lib/supabase/server";
+import { FileDown } from "lucide-react";
 import type { ClientInvoice } from "@/types/database.types";
 
 async function getInvoices(): Promise<ClientInvoice[]> {
@@ -29,6 +30,16 @@ const columns: Column<ClientInvoice>[] = [
   { header: "Taxes", accessor: (i) => formatCurrency(i.taxes), align: "right" },
   { header: "Total", accessor: (i) => <span className="font-semibold">{formatCurrency(i.grand_total)}</span>, align: "right" },
   { header: "Status", accessor: (i) => <StatusBadge status={i.status} /> },
+  { header: "", accessor: (i) => (
+      
+        href={`/api/invoices/client/${i.id}/pdf`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:underline"
+      >
+        <FileDown size={12} /> PDF
+      </a>
+    ), align: "right" },
 ];
 
 export default async function ClientInvoicesPage() {
