@@ -2,12 +2,12 @@
 import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { formatDate } from "@/lib/utils";
 import { formatCurrency } from "@/lib/calculations/invoice";
 import { createClient } from "@/lib/supabase/server";
-import { FileDown } from "lucide-react";
+import { FileDown, Plus } from "lucide-react";
 import type { ClientInvoice } from "@/types/database.types";
-
 async function getInvoices(): Promise<ClientInvoice[]> {
   try {
     const supabase = await createClient();
@@ -54,7 +54,14 @@ export default async function ClientInvoicesPage() {
 
   return (
     <>
-      <Topbar title="Client Invoices" />
+      <Topbar
+        title="Client Invoices"
+        action={
+          <Button href="/invoices/client/new">
+            <Plus size={15} /> New invoice
+          </Button>
+        }
+      />
       <div className="space-y-4 p-6">
         <div className="rounded-md border border-line bg-surface px-5 py-3 text-sm text-slate-600">
           Auto-generated from approved timesheets.{" "}
