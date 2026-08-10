@@ -69,6 +69,7 @@ export interface ClientInvoice {
   invoice_number: string;
   invoice_date: string;
   due_date: string;
+  paid_date: string | null;
   client_id: string;
   consultant_id: string;
   hours_worked: number;

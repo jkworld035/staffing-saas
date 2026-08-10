@@ -46,3 +46,16 @@ export async function createClientInvoiceRecord(formData: FormData) {
   revalidatePath("/dashboard");
   redirect("/invoices/client");
 }
+export async function markClientInvoicePaid(id: string, paidDate: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("client_invoices")
+    .update({ status: "PAID", paid_date: paidDate })
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/invoices/client");
+  revalidatePath("/dashboard");
+  revalidatePath("/profit-loss");
+}
